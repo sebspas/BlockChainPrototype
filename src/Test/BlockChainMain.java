@@ -1,17 +1,17 @@
 package Test;
 
 import BlockChain.Block;
+import BlockChain.BlockChain;
 
 public class BlockChainMain {
 
     public static void main(String[] args) {
-        Block genesisBlock = new Block("Origin block", "0");
-        System.out.println("Hash for block 1 : " + genesisBlock.hash);
+        BlockChain blockChain = BlockChain.getInstance();
 
-        Block secondBlock = new Block("Second block", genesisBlock.hash);
-        System.out.println("Hash for block 2 : " + secondBlock.hash);
+        blockChain.addBlock(new Block("Origin block", "0"));
+        blockChain.addBlock(new Block("Second block", blockChain.getLastBlock().hash));
+        blockChain.addBlock(new Block("Third block", blockChain.getLastBlock().hash));
 
-        Block thirdBlock = new Block("Third block", secondBlock.hash);
-        System.out.println("Hash for block 3 : " + thirdBlock.hash);
+        System.out.println(blockChain.getJSON());
     }
 }

@@ -1,4 +1,4 @@
-package BlockChain;
+package MyBlockChain;
 
 import com.google.gson.GsonBuilder;
 

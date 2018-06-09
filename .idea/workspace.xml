@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ff7d346-a48b-4720-887f-0eb149983e81" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/gson_2_6_2.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/BlockChain/BlockChain.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/BlockChainPrototype.iml" afterPath="$PROJECT_DIR$/BlockChainPrototype.iml" />
-      <change beforePath="$PROJECT_DIR$/out/production/BlockChainPrototype/Test/BlockChainMain.class" afterPath="$PROJECT_DIR$/out/production/BlockChainPrototype/Test/BlockChainMain.class" />
       <change beforePath="$PROJECT_DIR$/src/BlockChain/Block.java" afterPath="$PROJECT_DIR$/src/BlockChain/Block.java" />
+      <change beforePath="$PROJECT_DIR$/src/BlockChain/BlockChain.java" afterPath="$PROJECT_DIR$/src/BlockChain/BlockChain.java" />
       <change beforePath="$PROJECT_DIR$/src/Test/BlockChainMain.java" afterPath="$PROJECT_DIR$/src/Test/BlockChainMain.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,21 +17,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Block.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Block.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/BlockChain/Block.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="19" column="10" lean-forward="false" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
+            <state relative-caret-position="308">
+              <caret line="23" column="41" lean-forward="true" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BlockChainMain.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BlockChainMain.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Test/BlockChainMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="3" column="29" lean-forward="true" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="29" />
+            <state relative-caret-position="138">
+              <caret line="12" column="59" lean-forward="true" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -45,18 +42,19 @@
       <file leaf-file-name="BlockChain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/BlockChain/BlockChain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-258">
-              <caret line="7" column="25" lean-forward="false" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+            <state relative-caret-position="69">
+              <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#367#368#0" expanded="true" />
-                <element signature="e#413#414#0" expanded="true" />
-                <element signature="e#450#451#0" expanded="true" />
-                <element signature="e#483#484#0" expanded="true" />
-                <element signature="e#518#519#0" expanded="true" />
-                <element signature="e#576#577#0" expanded="true" />
-                <element signature="e#607#608#0" expanded="true" />
-                <element signature="e#695#696#0" expanded="true" />
+                <element signature="e#348#349#0" expanded="true" />
+                <element signature="e#394#395#0" expanded="true" />
+                <element signature="e#431#432#0" expanded="true" />
+                <element signature="e#464#465#0" expanded="true" />
+                <element signature="e#499#500#0" expanded="true" />
+                <element signature="e#557#558#0" expanded="true" />
+                <element signature="e#588#589#0" expanded="true" />
+                <element signature="e#628#629#0" expanded="true" />
+                <element signature="e#659#660#0" expanded="true" />
+                <element signature="e#747#748#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -93,8 +91,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/BlockChain/StringUtil.java" />
-        <option value="$PROJECT_DIR$/src/Test/BlockChainMain.java" />
         <option value="$PROJECT_DIR$/src/BlockChain/Block.java" />
+        <option value="$PROJECT_DIR$/src/Test/BlockChainMain.java" />
         <option value="$PROJECT_DIR$/src/BlockChain/BlockChain.java" />
       </list>
     </option>
@@ -291,12 +289,12 @@
       <option name="presentableId" value="Default" />
       <updated>1528568362241</updated>
       <workItem from="1528568366075" duration="129000" />
-      <workItem from="1528568510900" duration="2214000" />
+      <workItem from="1528568510900" duration="3430000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2343000" />
+    <option name="totallyTimeSpent" value="3559000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="953" y="0" width="974" height="1047" extended-state="0" />
@@ -311,7 +309,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32976446" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32976446" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -387,39 +385,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Test/BlockChainMain.java">
+    <entry file="file://$PROJECT_DIR$/src/BlockChain/Block.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="3" column="29" lean-forward="true" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="308">
+          <caret line="23" column="41" lean-forward="true" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/BlockChain/BlockChain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-258">
-          <caret line="7" column="25" lean-forward="false" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+        <state relative-caret-position="69">
+          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#367#368#0" expanded="true" />
-            <element signature="e#413#414#0" expanded="true" />
-            <element signature="e#450#451#0" expanded="true" />
-            <element signature="e#483#484#0" expanded="true" />
-            <element signature="e#518#519#0" expanded="true" />
-            <element signature="e#576#577#0" expanded="true" />
-            <element signature="e#607#608#0" expanded="true" />
-            <element signature="e#695#696#0" expanded="true" />
+            <element signature="e#348#349#0" expanded="true" />
+            <element signature="e#394#395#0" expanded="true" />
+            <element signature="e#431#432#0" expanded="true" />
+            <element signature="e#464#465#0" expanded="true" />
+            <element signature="e#499#500#0" expanded="true" />
+            <element signature="e#557#558#0" expanded="true" />
+            <element signature="e#588#589#0" expanded="true" />
+            <element signature="e#628#629#0" expanded="true" />
+            <element signature="e#659#660#0" expanded="true" />
+            <element signature="e#747#748#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BlockChain/Block.java">
+    <entry file="file://$PROJECT_DIR$/src/Test/BlockChainMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="19" column="10" lean-forward="false" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
-          <folding />
+        <state relative-caret-position="138">
+          <caret line="12" column="59" lean-forward="true" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

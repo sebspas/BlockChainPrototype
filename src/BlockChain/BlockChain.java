@@ -1,11 +1,12 @@
 package BlockChain;
 
 import com.google.gson.GsonBuilder;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.ArrayList;
 
 public class BlockChain {
+    public static int difficulty = 5;
+
     private ArrayList<Block> blockChain;
 
     private final static BlockChain instance = new BlockChain();
@@ -22,6 +23,10 @@ public class BlockChain {
         return blockChain.get(blockChain.size()-1);
     }
 
+    public Block get(int i) {
+        return blockChain.get(i);
+    }
+
     public String getJSON() {
         return new GsonBuilder().setPrettyPrinting().create().toJson(blockChain);
     }
@@ -29,6 +34,7 @@ public class BlockChain {
     public Boolean isChainValid() {
         Block currentBlock;
         Block previousBlock;
+        String hashTarget = new String(new char[difficulty]).replace('\0', '0');
 
         for (int i = 1; i < blockChain.size(); i++) {
             currentBlock = blockChain.get(i);
@@ -41,6 +47,12 @@ public class BlockChain {
 
             if (!previousBlock.hash.equals(currentBlock.previousHash)) {
                 System.out.println("Previous Hashes not equal");
+                return false;
+            }
+
+            //check if hash is solved
+            if(!currentBlock.hash.substring( 0, difficulty).equals(hashTarget)) {
+                System.out.println("This block hasn't been mined");
                 return false;
             }
         }

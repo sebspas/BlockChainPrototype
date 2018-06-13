@@ -1,5 +1,10 @@
+import json
+import sys
+import urllib
 from uuid import uuid4
+
 from flask import Flask, jsonify, request
+
 from blockchain import Blockchain
 
 # Instantiate our Node
@@ -41,6 +46,7 @@ def mine():
 
     return jsonify(response), 200
 
+
 @app.route('/chain', methods=['GET'])
 def full_chain():
     response = {
@@ -48,6 +54,7 @@ def full_chain():
         'length': len(blockchain.chain),
     }
     return jsonify(response), 200
+
 
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
@@ -64,10 +71,11 @@ def new_transaction():
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
 
+
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
     values = request.get_json()
-
+    print(values)
     nodes = values.get('nodes')
     if nodes is None:
         return "Error: Please supply a valid list of nodes", 400
@@ -100,5 +108,31 @@ def consensus():
     return jsonify(response), 200
 
 
+@app.route('/nodes', methods=['GET'])
+def nodes_list():
+    var = ""
+    print(blockchain.nodes)
+    for n in blockchain.nodes:
+        var += n + ","
+
+    response = {
+        'nodes': var
+    }
+
+    return jsonify(response), 200
+
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5001)
+    my_port = sys.argv[1]
+    # we register to the main node
+    if int(my_port) != 5000:
+        data = {
+            'nodes': ['http://127.0.0.1:' + my_port]
+        }
+        req = urllib.request.Request('http://127.0.0.1:5000/nodes/register')
+        req.add_header('Content-Type', 'application/json; charset=utf-8')
+        jsondata = json.dumps(data)
+        jsondataasbytes = jsondata.encode('utf-8')  # needs to be bytes
+        req.add_header('Content-Length', len(jsondataasbytes))
+        response = urllib.request.urlopen(req, jsondataasbytes)
+
+    app.run(host='127.0.0.1', port=my_port)

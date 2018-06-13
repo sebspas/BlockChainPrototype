@@ -1,8 +1,11 @@
 import json
 import sys
+import threading
+import time
 import urllib
 from uuid import uuid4
 
+import requests
 from flask import Flask, jsonify, request
 
 from blockchain import Blockchain
@@ -75,18 +78,26 @@ def new_transaction():
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
     values = request.get_json()
-    print(values)
     nodes = values.get('nodes')
+
     if nodes is None:
         return "Error: Please supply a valid list of nodes", 400
 
     for node in nodes:
         blockchain.register_node(node)
 
+    # register on all the other known nodes
+    if int(my_port) == 5000:
+        for node_source in blockchain.nodes:
+            for node_dest in blockchain.nodes:
+                print("n:" + node_source + " d:" + node_dest)
+                register_new_nodes_on_destnode('http://' + node_source, 'http://' + node_dest)
+
     response = {
         'message': 'New nodes have been added',
         'total_nodes': list(blockchain.nodes),
     }
+    print(blockchain.nodes)
     return jsonify(response), 201
 
 
@@ -111,7 +122,6 @@ def consensus():
 @app.route('/nodes', methods=['GET'])
 def nodes_list():
     var = ""
-    print(blockchain.nodes)
     for n in blockchain.nodes:
         var += n + ","
 
@@ -121,18 +131,47 @@ def nodes_list():
 
     return jsonify(response), 200
 
+@app.route("/")
+def hello():
+    return "BlockChain Started!"
+
+def register_new_nodes_on_destnode(newnode_adr, dest_node_adr):
+    data = {
+        'nodes': [newnode_adr]
+    }
+    adr = dest_node_adr + '/nodes/register'
+    req = urllib.request.Request(adr)
+    req.add_header('Content-Type', 'application/json; charset=utf-8')
+    jsondata = json.dumps(data)
+    jsondataasbytes = jsondata.encode('utf-8')  # needs to be bytes
+    req.add_header('Content-Length', len(jsondataasbytes))
+    response = urllib.request.urlopen(req, jsondataasbytes)
+
+
+def start_runner():
+    def start_loop():
+        not_started = True
+        while not_started:
+            print('In start loop')
+            try:
+                r = requests.get('http://127.0.0.1:' + str(my_port) + "/")
+                if r.status_code == 200:
+                    print('Server started, quiting start_loop')
+                    not_started = False
+                    # we register to the main node
+                    if int(my_port) != 5000:
+                        my_node_adr = 'http://' + '127.0.0.1' + ':' + str(my_port)
+                        dest_main_node_adr = 'http://' + '127.0.0.1' + ':' + str(5000)
+                        register_new_nodes_on_destnode(my_node_adr, dest_main_node_adr)
+                        blockchain.register_node(dest_main_node_adr)
+            except:
+                print('Server not yet started')
+            time.sleep(2)
+
+    thread = threading.Thread(target=start_loop)
+    thread.start()
+
 if __name__ == '__main__':
     my_port = sys.argv[1]
-    # we register to the main node
-    if int(my_port) != 5000:
-        data = {
-            'nodes': ['http://127.0.0.1:' + my_port]
-        }
-        req = urllib.request.Request('http://127.0.0.1:5000/nodes/register')
-        req.add_header('Content-Type', 'application/json; charset=utf-8')
-        jsondata = json.dumps(data)
-        jsondataasbytes = jsondata.encode('utf-8')  # needs to be bytes
-        req.add_header('Content-Length', len(jsondataasbytes))
-        response = urllib.request.urlopen(req, jsondataasbytes)
-
+    start_runner()
     app.run(host='127.0.0.1', port=my_port)

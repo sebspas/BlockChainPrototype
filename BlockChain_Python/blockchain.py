@@ -1,6 +1,6 @@
 import hashlib
 import json
-from time import time
+import time
 from urllib.parse import urlparse
 import requests
 
@@ -10,6 +10,7 @@ class Blockchain(object):
         self.chain = []
         self.nodes = set()
         self.current_transactions = []
+        self.sync = False
 
         # Create the genesis block
         self.new_block(previous_hash=1, proof=100)
@@ -23,7 +24,7 @@ class Blockchain(object):
         """
         block = {
             'index': len(self.chain) + 1,
-            'timestamp': time(),
+            'timestamp': time.time(),
             'transactions': self.current_transactions,
             'proof': proof,
             'previous_hash': previous_hash or self.hash(self.chain[-1]),
@@ -35,6 +36,19 @@ class Blockchain(object):
         self.chain.append(block)
 
         return block
+
+    def add_block(self, block):
+        #Stop the current mining
+        self.sync = False
+
+        # Reset the current list of transactions
+        self.current_transactions = []
+        self.chain.append(block)
+        print(self.valid_chain(self.chain))
+
+        # Restart the new mining
+        self.sync = True
+
 
     @staticmethod
     def hash(block):
@@ -78,8 +92,14 @@ class Blockchain(object):
         :return: <int>
         """
         proof = 0
+        chain_length = len(self.chain)
         while self.valid_proof(last_proof, proof) is False:
+            if self.sync is False or chain_length != len(self.chain):
+                print("Break current mining")
+                proof = False
+                break
             proof += 1
+            time.sleep(0.000001)
 
         return proof
 
@@ -117,15 +137,17 @@ class Blockchain(object):
 
         while current_index < len(chain):
             block = chain[current_index]
-            print(f'{last_block}')
+            '''print(f'{last_block}')
             print(f'{block}')
             print("\n-----------\n")
-            # Check that the hash of the block is correct
-            if block['previous_hash'] != self.hash(last_block):
-                return False
-
+            print(last_block['proof'])
+            print(block['proof'])'''
             # Check that the Proof of Work is correct
             if not self.valid_proof(last_block['proof'], block['proof']):
+                return False
+
+            # Check that the hash of the block is correct
+            if block['previous_hash'] != self.hash(last_block):
                 return False
 
             last_block = block
@@ -154,7 +176,7 @@ class Blockchain(object):
                 chain = response.json()['chain']
 
                 # Check if the length is longer and the chain is valid
-                if length > max_length and self.valid_chain(chain):
+                if length >= max_length and self.valid_chain(chain):
                     max_length = length
                     new_chain = chain
 

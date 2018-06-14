@@ -3,6 +3,7 @@ import sys
 import threading
 import time
 import urllib
+from urllib.parse import urlparse
 from uuid import uuid4
 
 import requests
@@ -21,12 +22,38 @@ blockchain = Blockchain()
 
 
 @app.route('/mine', methods=['GET'])
+def mine_request():
+    block = mine()
+
+    if block is False:
+        response = {
+            'message': "Block added by the network"
+        }
+    else:
+        response = {
+            'message': "New Block Forged",
+            'index': block['index'],
+            'transactions': block['transactions'],
+            'proof': block['proof'],
+            'previous_hash': block['previous_hash'],
+        }
+
+    return jsonify(response), 200
+
 def mine():
+    while blockchain.sync is False:
+        time.sleep(0.5)
+    print("Starting mining a new block...")
     # We run the proof of work algorithm to get the next proof...
     last_block = blockchain.last_block
     last_proof = last_block['proof']
     proof = blockchain.proof_of_work(last_proof)
 
+    if proof is False:
+        print("Block mined by the network, proof invalid...")
+        return False
+
+    print("New block mined")
     # We must receive a reward for finding the proof.
     # The sender is "0" to signify that this node has mined a new coin.
     blockchain.new_transaction(
@@ -39,16 +66,27 @@ def mine():
     previous_hash = blockchain.hash(last_block)
     block = blockchain.new_block(proof, previous_hash)
 
-    response = {
-        'message': "New Block Forged",
-        'index': block['index'],
-        'transactions': block['transactions'],
-        'proof': block['proof'],
-        'previous_hash': block['previous_hash'],
-    }
+    # Send the new block to everyone else on the network
+    for n in blockchain.nodes:
+        send_data_to_node('http://' + n + '/block/add', block)
 
-    return jsonify(response), 200
+    return block
 
+
+@app.route('/block/add', methods=['POST'])
+def add_block():
+    block = request.get_json()
+
+    print("Received by the network:")
+    print(str(block.get('index')) + " " + str(blockchain.last_block['index']+1))
+
+    if block.get('index') == blockchain.last_block['index']+1:
+        blockchain.add_block(block)
+    elif block.get('index') >= blockchain.last_block['index']+2 or block.get('index') == blockchain.last_block['index']:
+        print("consensus")
+        consensus()
+
+    return jsonify("Ok"), 200
 
 @app.route('/chain', methods=['GET'])
 def full_chain():
@@ -71,6 +109,9 @@ def new_transaction():
     # Create a new Transaction
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
+    # Send the transaction to everyone on the network
+    #TODO
+
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
 
@@ -83,27 +124,30 @@ def register_nodes():
     if nodes is None:
         return "Error: Please supply a valid list of nodes", 400
 
+    #check if the node to add is not ourselves
     for node in nodes:
-        blockchain.register_node(node)
+        parse_url = urlparse(node).netloc
+
+        if parse_url not in blockchain.nodes and parse_url != '127.0.0.1:' + my_port:
+            blockchain.register_node(node)
 
     # register on all the other known nodes
     if int(my_port) == 5000:
         for node_source in blockchain.nodes:
             for node_dest in blockchain.nodes:
-                print("n:" + node_source + " d:" + node_dest)
                 register_new_nodes_on_destnode('http://' + node_source, 'http://' + node_dest)
 
     response = {
         'message': 'New nodes have been added',
         'total_nodes': list(blockchain.nodes),
     }
-    print(blockchain.nodes)
+
     return jsonify(response), 201
 
 
 @app.route('/nodes/resolve', methods=['GET'])
-def consensus():
-    replaced = blockchain.resolve_conflicts()
+def consensus_request():
+    replaced = consensus()
 
     if replaced:
         response = {
@@ -118,6 +162,10 @@ def consensus():
 
     return jsonify(response), 200
 
+def consensus():
+    blockchain.sync = False
+    replaced = blockchain.resolve_conflicts()
+    blockchain.sync = True
 
 @app.route('/nodes', methods=['GET'])
 def nodes_list():
@@ -131,15 +179,16 @@ def nodes_list():
 
     return jsonify(response), 200
 
-@app.route("/")
-def hello():
-    return "BlockChain Started!"
-
 def register_new_nodes_on_destnode(newnode_adr, dest_node_adr):
     data = {
         'nodes': [newnode_adr]
     }
     adr = dest_node_adr + '/nodes/register'
+    send_data_to_node(adr, data)
+
+
+def send_data_to_node(dest_adr, data):
+    adr = dest_adr
     req = urllib.request.Request(adr)
     req.add_header('Content-Type', 'application/json; charset=utf-8')
     jsondata = json.dumps(data)
@@ -148,15 +197,24 @@ def register_new_nodes_on_destnode(newnode_adr, dest_node_adr):
     response = urllib.request.urlopen(req, jsondataasbytes)
 
 
+def launch_mining():
+    def mining():
+        consensus()
+        while True:
+            mine()
+
+    thread = threading.Thread(target=mining)
+    thread.start()
+
 def start_runner():
     def start_loop():
         not_started = True
         while not_started:
             print('In start loop')
             try:
-                r = requests.get('http://127.0.0.1:' + str(my_port) + "/")
+                r = requests.get('http://127.0.0.1:' + str(my_port) + "/chain")
                 if r.status_code == 200:
-                    print('Server started, quiting start_loop')
+                    print('Node connected, starting p2p and mining!')
                     not_started = False
                     # we register to the main node
                     if int(my_port) != 5000:
@@ -164,6 +222,7 @@ def start_runner():
                         dest_main_node_adr = 'http://' + '127.0.0.1' + ':' + str(5000)
                         register_new_nodes_on_destnode(my_node_adr, dest_main_node_adr)
                         blockchain.register_node(dest_main_node_adr)
+                    launch_mining()
             except:
                 print('Server not yet started')
             time.sleep(2)

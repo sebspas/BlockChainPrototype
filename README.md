@@ -33,7 +33,11 @@ en REST (http) :
 * Vérification de l'intégrité de la blockchain
 * Minage d'un bloc pour l'ajouter à la chaîne
 * Ajout d'un nouveau noeud au réseau
-* Algoritme de gestion des conflits entre les différents noeuds
+* Algoritme de gestion des conflits, consensus, entre les différents noeuds
+
+Cette blockchain est très proche d'une application réelle, puisque les noeuds mine constament des nouveaux blocks. Il
+y a établissement d'un consensus entre les différents noeuds pour garder la blockchain synchronisé. On peut aussi y 
+éffectuer des transactions en utilisant les requêtes http.
 
 ## Langages de développement
 

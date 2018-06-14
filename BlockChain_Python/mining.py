@@ -5,10 +5,12 @@ import requests
 
 from network import register_new_nodes_on_destnode, send_data_to_node
 
+
 def consensus(blockchain):
     blockchain.sync = False
     replaced = blockchain.resolve_conflicts()
     blockchain.sync = True
+
 
 def mine(blockchain, node_identifier):
     while blockchain.sync is False:

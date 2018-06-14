@@ -1,5 +1,4 @@
 import sys
-import time
 from urllib.parse import urlparse
 from uuid import uuid4
 
@@ -38,20 +37,23 @@ def mine_request():
 
     return jsonify(response), 200
 
+
 @app.route('/block/add', methods=['POST'])
 def add_block():
     block = request.get_json()
 
     print("Received by the network:")
-    print(str(block.get('index')) + " " + str(blockchain.last_block['index']+1))
+    print(str(block.get('index')) + " " + str(blockchain.last_block['index'] + 1))
 
-    if block.get('index') == blockchain.last_block['index']+1:
+    if block.get('index') == blockchain.last_block['index'] + 1:
         blockchain.add_block(block)
-    elif block.get('index') >= blockchain.last_block['index']+2 or block.get('index') == blockchain.last_block['index']:
+    elif block.get('index') >= blockchain.last_block['index'] + 2 \
+            or block.get('index') == blockchain.last_block['index']:
         print("consensus")
         consensus(blockchain)
 
     return jsonify("Ok"), 200
+
 
 @app.route('/chain', methods=['GET'])
 def full_chain():
@@ -60,6 +62,7 @@ def full_chain():
         'length': len(blockchain.chain),
     }
     return jsonify(response), 200
+
 
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
@@ -80,8 +83,9 @@ def new_transaction():
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
 
+
 @app.route('/transactions/add', methods=['POST'])
-def add_transcation():
+def add_transaction():
     values = request.get_json()
 
     # Check that the required fields are in the POST'ed data
@@ -95,6 +99,7 @@ def add_transcation():
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
 
+
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
     values = request.get_json()
@@ -103,7 +108,7 @@ def register_nodes():
     if nodes is None:
         return "Error: Please supply a valid list of nodes", 400
 
-    #check if the node to add is not ourselves
+    # check if the node to add is not ourselves
     for node in nodes:
         parse_url = urlparse(node).netloc
 
@@ -141,6 +146,7 @@ def consensus_request():
 
     return jsonify(response), 200
 
+
 @app.route('/nodes', methods=['GET'])
 def nodes_list():
     var = ""
@@ -152,6 +158,7 @@ def nodes_list():
     }
 
     return jsonify(response), 200
+
 
 if __name__ == '__main__':
     my_port = sys.argv[1]

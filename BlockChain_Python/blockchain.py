@@ -38,7 +38,7 @@ class Blockchain(object):
         return block
 
     def add_block(self, block):
-        #Stop the current mining
+        # Stop the current mining
         self.sync = False
 
         # Reset the current list of transactions
@@ -48,7 +48,6 @@ class Blockchain(object):
 
         # Restart the new mining
         self.sync = True
-
 
     @staticmethod
     def hash(block):

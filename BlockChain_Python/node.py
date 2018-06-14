@@ -110,11 +110,26 @@ def new_transaction():
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
     # Send the transaction to everyone on the network
-    #TODO
+    for n in blockchain.nodes:
+        send_data_to_node('http://' + n + '/transactions/add', blockchain.current_transactions[-1])
 
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
 
+@app.route('/transactions/add', methods=['POST'])
+def add_transcation():
+    values = request.get_json()
+
+    # Check that the required fields are in the POST'ed data
+    required = ['sender', 'recipient', 'amount']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+
+    # Create a new Transaction
+    index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
+
+    response = {'message': f'Transaction will be added to Block {index}'}
+    return jsonify(response), 201
 
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():

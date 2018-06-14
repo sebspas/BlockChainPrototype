@@ -39,6 +39,37 @@ Cette blockchain est très proche d'une application réelle, puisque les noeuds 
 y a établissement d'un consensus entre les différents noeuds pour garder la blockchain synchronisé. On peut aussi y 
 éffectuer des transactions en utilisant les requêtes http.
 
+Pour lancer le noeud :
+```
+python3.6 node.py <mon_ip> <mon_port> <ip_noeud_principal>
+```
+
+**Le noeud principal doit se trouver sur le port 5000.**
+
+Une fois le noeud lancé il est possible d'accéder aux infos du noeud par une requête http.
+
+*Je recommande **[Postman](https://www.getpostman.com/)** pour faire les requêtes Http.*
+
+* Voir les informations relative à notre noeud:
+```
+[GET] http://<mon_ip>:<mon_port>/node/info
+```
+* Voir la blockchain
+```
+[GET] http://<mon_ip>:<mon_port>/chain
+```
+* Effectuer une transaction. Il faut aussi envoyer les données Json au format suivant.
+```
+[POST] http://<mon_ip>:<mon_port>/transactions/new
+
+[JSON DATA]
+{
+ "sender": "<source_id>",
+ "recipient": "<destination_id>",
+ "amount": <montant>
+}
+```
+
 ## Langages de développement
 
 * Python3.6

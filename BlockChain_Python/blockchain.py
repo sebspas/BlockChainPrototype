@@ -44,7 +44,7 @@ class Blockchain(object):
         # Reset the current list of transactions
         self.current_transactions = []
         self.chain.append(block)
-        print(self.valid_chain(self.chain))
+        print(f'Chain integrity {self.valid_chain(self.chain)}')
 
         # Restart the new mining
         self.sync = True
@@ -160,6 +160,7 @@ class Blockchain(object):
         by replacing our chain with the longest one in the network.
         :return: <bool> True if our chain was replaced, False if not
         """
+        print("Launching consensus algorithm...")
         neighbours = self.nodes
         new_chain = None
 

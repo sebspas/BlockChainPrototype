@@ -9,6 +9,10 @@ from network import register_new_nodes_on_destnode, send_data_to_node
 def consensus(blockchain):
     blockchain.sync = False
     replaced = blockchain.resolve_conflicts()
+    if replaced is True:
+        print("New chain downloaded from the network.")
+    else :
+        print("No need to downlaod a new chain.")
     blockchain.sync = True
 
 
@@ -55,22 +59,23 @@ def launch_mining(blockchain, node_identifier):
     thread.start()
 
 
-def start_p2p_and_mining(blockchain, my_port, node_identifier):
+def start_p2p_and_mining(blockchain, my_port, node_identifier, main_node_ip, my_ip):
     def start_loop():
         not_started = True
         while not_started:
-            print('In start loop')
             try:
-                r = requests.get('http://127.0.0.1:' + str(my_port) + "/chain")
+                r = requests.get('http://' + my_ip + ':' + str(my_port) + "/chain")
                 if r.status_code == 200:
-                    print('Node connected, starting p2p and mining!')
+                    print('Node online!')
                     not_started = False
                     # we register to the main node
                     if int(my_port) != 5000:
-                        my_node_adr = 'http://' + '127.0.0.1' + ':' + str(my_port)
-                        dest_main_node_adr = 'http://' + '127.0.0.1' + ':' + str(5000)
+                        print("Connecting to the main node...")
+                        my_node_adr = 'http://' + my_ip + ':' + str(my_port)
+                        dest_main_node_adr = 'http://' + main_node_ip + ':' + str(5000)
                         register_new_nodes_on_destnode(my_node_adr, dest_main_node_adr)
                         blockchain.register_node(dest_main_node_adr)
+                        print("Adding the other nodes address to my data...")
                     launch_mining(blockchain, node_identifier)
             except:
                 print('Server not yet started')

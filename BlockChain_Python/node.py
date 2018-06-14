@@ -1,3 +1,4 @@
+import socket
 import sys
 from urllib.parse import urlparse
 from uuid import uuid4
@@ -42,14 +43,14 @@ def mine_request():
 def add_block():
     block = request.get_json()
 
-    print("Received by the network:")
-    print(str(block.get('index')) + " " + str(blockchain.last_block['index'] + 1))
+    print(f'Received by the network {str(block.get("index"))} expected {str(blockchain.last_block["index"] + 1)}')
 
     if block.get('index') == blockchain.last_block['index'] + 1:
+        print("Adding the block to the chain.")
         blockchain.add_block(block)
     elif block.get('index') >= blockchain.last_block['index'] + 2 \
             or block.get('index') == blockchain.last_block['index']:
-        print("consensus")
+        print("Our chain is not up-to-date, we call the consensus!")
         consensus(blockchain)
 
     return jsonify("Ok"), 200
@@ -116,7 +117,7 @@ def register_nodes():
     for node in nodes:
         parse_url = urlparse(node).netloc
 
-        if parse_url not in blockchain.nodes and parse_url != '127.0.0.1:' + my_port:
+        if parse_url not in blockchain.nodes and parse_url != my_ip + ':' + my_port:
             blockchain.register_node(node)
 
     # register on all the other known nodes
@@ -153,7 +154,6 @@ def consensus_request():
 
 @app.route('/node/info', methods=['GET'])
 def info():
-
     response = {
         'message': "Node info",
         'id': node_identifier,
@@ -179,6 +179,8 @@ def nodes_list():
 
 
 if __name__ == '__main__':
-    my_port = sys.argv[1]
-    start_p2p_and_mining(blockchain, my_port, node_identifier)
-    app.run(host='127.0.0.1', port=my_port)
+    my_ip = sys.argv[1]
+    my_port = sys.argv[2]
+    main_node_ip  = sys.argv[3]
+    start_p2p_and_mining(blockchain, my_port, node_identifier, main_node_ip, my_ip)
+    app.run(host=my_ip, port=my_port)

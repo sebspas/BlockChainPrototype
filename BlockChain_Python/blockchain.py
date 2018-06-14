@@ -210,3 +210,6 @@ class Blockchain(object):
             current_index += 1
 
         return token
+
+    def remove_node_from_network(self, node_adr):
+        self.nodes.remove(urlparse(node_adr).netloc)

@@ -43,8 +43,9 @@ def mine(blockchain, node_identifier):
     block = blockchain.new_block(proof, previous_hash)
 
     # Send the new block to everyone else on the network
-    for n in blockchain.nodes:
-        send_data_to_node('http://' + n + '/block/add', block)
+    tmp_nodes_list = set.copy(blockchain.nodes)
+    for n in tmp_nodes_list:
+        send_data_to_node('http://' + n + '/block/add', block, blockchain)
 
     return block
 
@@ -73,7 +74,7 @@ def start_p2p_and_mining(blockchain, my_port, node_identifier, main_node_ip, my_
                         print("Connecting to the main node...")
                         my_node_adr = 'http://' + my_ip + ':' + str(my_port)
                         dest_main_node_adr = 'http://' + main_node_ip + ':' + str(5000)
-                        register_new_nodes_on_destnode(my_node_adr, dest_main_node_adr)
+                        register_new_nodes_on_destnode(my_node_adr, dest_main_node_adr, blockchain)
                         blockchain.register_node(dest_main_node_adr)
                         print("Adding the other nodes address to my data...")
                     launch_mining(blockchain, node_identifier)

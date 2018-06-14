@@ -74,6 +74,11 @@ def new_transaction():
     if not all(k in values for k in required):
         return 'Missing values', 400
 
+    # If you mine a block (sender = 0) or you are the sender, you can send otherwise you can't
+    if values['sender'] != "0" or values['sender'] != node_identifier:
+        response = {'message': 'You are not the owner of this transactions...'}
+        return jsonify(response), 201
+
     if values['amount'] > blockchain.get_credits(node_identifier):
         response = {'message': 'Not enough credits to make the transactions...'}
         return jsonify(response), 201
@@ -82,8 +87,9 @@ def new_transaction():
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
     # Send the transaction to everyone on the network
-    for n in blockchain.nodes:
-        send_data_to_node('http://' + n + '/transactions/add', blockchain.current_transactions[-1])
+    tmp_nodes_list = set.copy(blockchain.nodes)
+    for n in tmp_nodes_list:
+        send_data_to_node('http://' + n + '/transactions/add', blockchain.current_transactions[-1], blockchain)
 
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
@@ -124,7 +130,7 @@ def register_nodes():
     if int(my_port) == 5000:
         for node_source in blockchain.nodes:
             for node_dest in blockchain.nodes:
-                register_new_nodes_on_destnode('http://' + node_source, 'http://' + node_dest)
+                register_new_nodes_on_destnode('http://' + node_source, 'http://' + node_dest, blockchain)
 
     response = {
         'message': 'New nodes have been added',

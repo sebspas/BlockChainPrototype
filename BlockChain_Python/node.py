@@ -1,3 +1,4 @@
+import hashlib
 import socket
 import sys
 from urllib.parse import urlparse
@@ -13,7 +14,7 @@ from network import send_data_to_node, register_new_nodes_on_destnode
 app = Flask(__name__)
 
 # Generate a globally unique address for this node
-node_identifier = str(uuid4()).replace('-', '')
+#node_identifier = str(uuid4()).replace('-', '')
 
 # Instantiate the Blockchain
 blockchain = Blockchain()
@@ -187,6 +188,8 @@ def nodes_list():
 if __name__ == '__main__':
     my_ip = sys.argv[1]
     my_port = sys.argv[2]
-    main_node_ip  = sys.argv[3]
+    main_node_ip = sys.argv[3]
+    node_identifier = hashlib.sha224(str(sys.argv[4]).encode('utf-8')).hexdigest()
+    print(f'Public id: {node_identifier}')
     start_p2p_and_mining(blockchain, my_port, node_identifier, main_node_ip, my_ip)
     app.run(host=my_ip, port=my_port)

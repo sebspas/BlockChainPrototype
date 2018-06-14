@@ -45,8 +45,10 @@ avec **[Flask](http://flask.pocoo.org/)** (installé grace à python3-pip).
 
 Pour lancer le noeud :
 ```
-python3.6 node.py <mon_ip> <mon_port> <ip_noeud_principal>
+python3.6 node.py <mon_ip> <mon_port> <ip_noeud_principal> <user_key>
 ```
+
+*user_key : correspond a votre mot de passe*
 
 **Le noeud principal doit se trouver sur le port 5000.**
 

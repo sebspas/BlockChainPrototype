@@ -185,3 +185,27 @@ class Blockchain(object):
             return True
 
         return False
+
+    def get_credits(self, node_identifier):
+        """
+        This method iterates on the blockchain to calculate the available
+        credits for this node (in this implementation a node is also a user)
+        :param node_identifier:
+        :return: the number of credits available
+        """
+        current_index = 1
+        token = 0
+
+        while current_index < len(self.chain):
+            block = self.chain[current_index]
+
+            for transaction in block['transactions']:
+                if transaction['sender'] == node_identifier:
+                    token -= transaction['amount']
+
+                if transaction['recipient'] == node_identifier:
+                    token += transaction['amount']
+
+            current_index += 1
+
+        return token

@@ -73,6 +73,10 @@ def new_transaction():
     if not all(k in values for k in required):
         return 'Missing values', 400
 
+    if values['amount'] > blockchain.get_credits(node_identifier):
+        response = {'message': 'Not enough credits to make the transactions...'}
+        return jsonify(response), 201
+
     # Create a new Transaction
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
@@ -143,6 +147,20 @@ def consensus_request():
             'message': 'Our chain is authoritative',
             'chain': blockchain.chain
         }
+
+    return jsonify(response), 200
+
+
+@app.route('/node/info', methods=['GET'])
+def info():
+
+    response = {
+        'message': "Node info",
+        'id': node_identifier,
+        'credits': blockchain.get_credits(node_identifier),
+        'current_block': blockchain.last_block['index'],
+        'valid_chain': blockchain.valid_chain(blockchain.chain)
+    }
 
     return jsonify(response), 200
 

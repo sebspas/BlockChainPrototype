@@ -75,7 +75,7 @@ def new_transaction():
         return 'Missing values', 400
 
     # If you mine a block (sender = 0) or you are the sender, you can send otherwise you can't
-    if values['sender'] != "0" or values['sender'] != node_identifier:
+    if values['sender'] != "0" and str(values['sender']) != str(node_identifier):
         response = {'message': 'You are not the owner of this transactions...'}
         return jsonify(response), 201
 

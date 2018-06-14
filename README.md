@@ -39,6 +39,10 @@ Cette blockchain est très proche d'une application réelle, puisque les noeuds 
 y a établissement d'un consensus entre les différents noeuds pour garder la blockchain synchronisé. On peut aussi y 
 éffectuer des transactions en utilisant les requêtes http.
 
+**Attention!**
+Pour tester cette version il est nécessaire d'installer **Python3.6**
+avec **[Flask](http://flask.pocoo.org/)** (installé grace à python3-pip).
+
 Pour lancer le noeud :
 ```
 python3.6 node.py <mon_ip> <mon_port> <ip_noeud_principal>
@@ -48,7 +52,8 @@ python3.6 node.py <mon_ip> <mon_port> <ip_noeud_principal>
 
 Une fois le noeud lancé il est possible d'accéder aux infos du noeud par une requête http.
 
-*Je recommande **[Postman](https://www.getpostman.com/)** pour faire les requêtes Http.*
+*Je recommande **[Postman](https://www.getpostman.com/)** pour faire les requêtes Http, sinon
+la commande **curl** fonctionne aussi.*
 
 * Voir les informations relative à notre noeud:
 ```
@@ -74,7 +79,7 @@ Une fois le noeud lancé il est possible d'accéder aux infos du noeud par une r
 
 * Python3.6
 * Java
-* Htttp
+* Http
 * Json
 
 ## Framework & Outils utilisés
